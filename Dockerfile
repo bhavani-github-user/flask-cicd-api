@@ -1,16 +1,12 @@
-FROM python:3.10-slim
+FROM python:3.9-slim
 
 WORKDIR /app
-
-COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
-
 COPY . .
 
-ENV PORT=8080
-EXPOSE 8080
+RUN pip install -r requirements.txt
+
+# Add health check (e.g., hitting the root URL of the Flask app)
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+ CMD curl --fail http://localhost:8080/ || exit 1
 
 CMD ["python", "app.py"]
-
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD curl -f http://localhost:8080/health || exit 1
