@@ -1,4 +1,4 @@
-name: Deploy to GCP VM
+name: CI/CD Deploy to GCP VM
 
 on:
   push:
@@ -24,6 +24,25 @@ jobs:
           cd /home/priya/flask-cicd-api
           git pull origin main
           # Add any other deployment commands here like docker build/run
+
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set up SSH agent
+      uses: webfactory/ssh-agent@v0.7.0
+      with:
+        ssh-private-key: ${{ secrets.NEW_SSH_PRIVATE_KEY }}
+
+    - name: Deploy to GCP VM
+      run: |
+        ssh -o StrictHostKeyChecking=no vkbhavani8@35.184.174.82 << EOF
+          cd /home/vkbhavani8/flask-cicd-api || exit 1
+          git pull origin main
+          docker build -t flask-cicd-api:latest .
+          docker stop flask-container || true
+          docker rm flask-container || true
+          docker run -d -p 8080:8080 --name flask-container flask-cicd-api:latest
+ 31d4562 (Save local changes before pull)
           exit
         EOF
  
