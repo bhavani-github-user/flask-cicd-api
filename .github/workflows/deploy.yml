@@ -3,26 +3,27 @@ name: Deploy to GCP VM
 on:
   push:
     branches:
-      - main
+      - main   # or your default branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Code
+    - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up SSH
+    - name: Start SSH agent and add private key
       uses: webfactory/ssh-agent@v0.7.0
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: Deploy Dockerized Flask App on GCP
+    - name: Run deployment script on VM
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-          docker stop flask-container || true
-          docker rm flask-container || true
-          docker pull YOUR_DOCKER_USERNAME/flask-cicd-api:latest
-          docker run -d -p 8080:8080 --name flask-container bhavani789/flask-cicd-api:latest
+        ssh -o StrictHostKeyChecking=no vkbhavani8@35.184.174.82 << 'EOF'
+          cd /home/priya/flask-cicd-api
+          git pull origin main
+          # Add any other deployment commands here like docker build/run
+          exit
         EOF
+ 
