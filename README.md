@@ -49,22 +49,18 @@ Before running this project, ensure you have:
 
 ---
 
-### ⚙️ Setup & Deployment for GCP DevOps Project
+## ⚙️ Setup & Deployment Steps
 
-# 1️⃣ Clone the Repository
+### 1️⃣ Clone the Repository
+```bash
 git clone https://github.com/<your-username>/<your-repo>.git
 cd <your-repo>
 
-# 2️⃣ Authenticate with GCP
-gcloud auth login
+### 2.gcloud auth login
 gcloud config set project <your-gcp-project-id>
 
-# 3️⃣ Build the Docker Image
-docker build -t gcp-devops-app .
+### 3.docker build -t gcp-devops-app .
 
-# 4️⃣ Run the Docker Container
-docker run -d -p 8080:8080 --name myapp gcp-devops-app:latest
+### 4.docker run -d -p 8080:8080 --name myapp myapp-image:latest
 
-# 5️⃣ Access the Application in Browser
-# Replace <EXTERNAL_IP> with the VM or GCP instance external IP
-echo "Application running at: http://<EXTERNAL_IP>:8080"
+### 5.http://<External IP address>:8080
